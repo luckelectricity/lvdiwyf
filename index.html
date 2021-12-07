@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计算金额</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      h3 {
+        text-align: center;
+      }
+      .countBox {
+        width: 300px;
+        height: 500px;
+        margin: 30px auto 0;
+      }
+      .countBox .list {
+        display: flex;
+        margin-bottom: 20px;
+      }
+      .countBox .list .label {
+        width: 80px;
+      }
+      .submitBtn {
+        width: 60px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 5px;
+        background: #4e71f2;
+        color: #fff;
+        cursor: pointer;
+      }
+      .result {
+        padding-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>西安绿地新里公馆一期新老物业费测算方法</h3>
+    <div class="countBox">
+      <!-- <div class="list">
+            <div class="label">方法：</div>
+            <div class="value">
+                <input type="radio" name="method" value="1">新标准
+                <input type="radio" name="method" value="2">旧标准
+            </div>
+        </div> -->
+      <div class="list">
+        <div class="label">面积：</div>
+        <div class="value">
+          <input type="number" id="area" />
+          <span>㎡</span>
+        </div>
+      </div>
+      <div class="list">
+        <div class="label">是否空置：</div>
+        <div class="value">
+          <input type="radio" name="isEmpty" value="1" />是
+          <input type="radio" name="isEmpty" value="0" />否
+        </div>
+      </div>
+      <div class="list">
+        <div class="label">车位数量：</div>
+        <div class="value">
+          <input type="number" id="carNum" />
+        </div>
+      </div>
+      <div class="list">
+        <div class="label">楼层：</div>
+        <div class="value">
+          <input type="number" id="level" />
+        </div>
+      </div>
+      <div class="submitBtn">计算</div>
+      <div class="result"></div>
+    </div>
+    <script
+      typet="text/javascript"
+      src="http://code.jquery.com/jquery-latest.js"
+    ></script>
+    <script>
+      $(function () {
+        $('.submitBtn').on('click', function () {
+          //   var method = $("input[name='method']:checked").val()
+          var area = $('#area').val()
+          var isEmpty = $("input[name='isEmpty']:checked").val()
+          var carNum = $('#carNum').val() || 0
+          var level = $('#level').val()
+          var oldTotal = 0 // 旧物业费总和
+          var newTotal = 0 // 新物业费总和
+          //   var elevatorFeeList = [0.15, 0.3, 0.35, 0.4, 0.48] // 电梯费用
+          var eleFee = 0.25 // 公摊电费
+          var rubbish = 6
+          var oldCarFee = 150
+          var newCarFee = 80
+          var elevatorFee = 0
+          if (level > 19) {
+            elevatorFee = 0.48
+          } else if (level > 13) {
+            elevatorFee = 0.4
+          } else if (level > 6) {
+            elevatorFee = 0.35
+          } else if (level > 2) {
+            elevatorFee = 0.3
+          } else if (level == 1) {
+            elevatorFee = 0.15
+          } else {
+            alert('不准住地下')
+          }
+          if (isEmpty == 1) {
+            oldTotal =
+              (1.5 * 0.7 + eleFee + elevatorFee) * area + 6 + oldCarFee * carNum
+            newTotal = (2.2 * area + newCarFee * carNum) * 0.7 + 6
+          } else {
+            oldTotal =
+              (1.5 + eleFee + elevatorFee) * area + 6 + oldCarFee * carNum
+            newTotal = 2.2 * area + newCarFee * carNum + 6
+          }
+          $('.result').html(
+            `根据填写的数据，在面积 ${area} , ${
+              isEmpty == 1 ? ' 空置 ' : ' 不空置 '
+            }，家里有 ${carNum} 个车位， ${level}楼的情况下, 在老的物业费条件下需要交${oldTotal.toFixed(
+              2
+            )}, 换成新的物业条件下需要交${newTotal.toFixed(
+              2
+            )}, 老物业费 - 新物业费的差额为${(oldTotal - newTotal).toFixed(2)}`
+          )
+        })
+      })
+    </script>
+  </body>
+</html>
